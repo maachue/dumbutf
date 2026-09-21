@@ -33,7 +33,7 @@ class CharWidthTest : public ::testing::TestWithParam<CharWidthCase> {};
 TEST_P(CharWidthTest, ReturnsExpectedWidth) {
   const auto &c = GetParam();
   EXPECT_EQ(dumbutf::codepointCharWidth(c.cp), c.expectedWidth)
-      << CPMessage(c.cp) << " (" << c.description << ")";
+      << CPPrint(c.cp) << " (" << c.description << ")";
 }
 
 // --- Width 0: control chars, combining marks, zero-width formatting ---
@@ -112,7 +112,7 @@ class AmbiguousWidthTest : public ::testing::TestWithParam<AmbiguousCase> {};
 TEST_P(AmbiguousWidthTest, ReturnsExpectedAmbiguity) {
   const auto &c = GetParam();
   EXPECT_EQ(dumbutf::isAmbiguousWidth(c.cp), c.expectedAmbiguous)
-      << CPMessage(c.cp) << " (" << c.description << ")";
+      << CPPrint(c.cp) << " (" << c.description << ")";
 }
 
 // --- Codepoints whose UAX #11 East Asian Width category is "A" ---
@@ -159,7 +159,7 @@ TEST(CharWidthTest, AllCPs) {
     auto dumbutf_Res = dumbutf::codepointCharWidth(CP);
     auto utf8proc_Res = utf8proc_charwidth(static_cast<utf8proc_int32_t>(CP));
 
-    EXPECT_EQ(dumbutf_Res, utf8proc_Res) << CPMessage(CP);
+    EXPECT_EQ(dumbutf_Res, utf8proc_Res) << CPPrint(CP);
   }
 }
 
@@ -170,7 +170,7 @@ TEST(AmbiguousWidthTest, AllCPs) {
     }
 
     EXPECT_EQ(dumbutf::isAmbiguousWidth(CP), utf8proc_charwidth_ambiguous(CP))
-        << CPMessage(CP);
+        << CPPrint(CP);
   }
 }
 #endif

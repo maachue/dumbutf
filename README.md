@@ -1,3 +1,3 @@
 # dumbutf
 
-Unicode
+Unicod

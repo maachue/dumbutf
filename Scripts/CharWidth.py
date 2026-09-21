@@ -1,5 +1,15 @@
 #!/bin/env python3
 
+"""
+This file generated data for codepointCharWidth and isAmbiguousWidth
+
+Arguments:
+SCRIPT $(unicode_data_dir) $(output_dir)
+
+The width classifications are derived from utf8proc.
+[data_generator.jl](https://github.com/JuliaStrings/utf8proc/blob/master/data/data_generator.jl)
+"""
+
 import sys
 from pathlib import Path
 

@@ -7,21 +7,32 @@
 #include <iomanip>
 #include <ios>
 #include <ostream>
+#include <span>
 #include <string>
 
-// std::string CPMessage(dumbutf::UTF32 cp) {
-//   char buf[32];
-//   std::snprintf(buf, sizeof(buf), "Failed at CP: U+%04X", cp);
-//   return std::string(buf);
-// }
-
-struct CPMessage {
+struct CPPrint {
   dumbutf::UTF32 CP;
 };
 
-inline std::ostream &operator<<(std::ostream &OS, CPMessage const &V) {
-  OS << "Failed at CP: U+" << std::hex << std::uppercase << std::setfill('0')
-     << std::setw(4) << V.CP;
+inline std::ostream &operator<<(std::ostream &OS, CPPrint const &V) {
+  OS << "U+" << std::hex << std::uppercase << std::setfill('0') << std::setw(4)
+     << V.CP;
+  return OS;
+}
+
+struct CPSPrint {
+  std::span<const dumbutf::UTF32> CPs;
+};
+
+inline std::ostream &operator<<(std::ostream &OS, CPSPrint const &V) {
+  if (V.CPs.empty())
+    return OS;
+
+  OS << CPPrint(V.CPs[0]);
+  for (size_t i = 1; i < V.CPs.size(); ++i) {
+    OS << " " << CPPrint(V.CPs[i]);
+  }
+
   return OS;
 }
 
