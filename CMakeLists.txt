@@ -7,7 +7,7 @@ project(
 option(DUMBUTF_BUILD_TESTS "dumbutf tests." ${PROJECT_IS_TOP_LEVEL})
 option(
   DUMBUTF_BUILD_TESTS_SLOW
-  "dumbutf tests ... but all codepoints (required: simdutf and utf8proc to test)."
+  "dumbutf tests ... but all codepoints."
   OFF)
 
 option(DUMBUTF_CLI "dumbutf cli (just for small testing)" ${PROJECT_IS_TOP_LEVEL})
@@ -52,9 +52,6 @@ if(DUMBUTF_BUILD_TESTS)
   if(DUMBUTF_BUILD_TESTS_SLOW)
     target_compile_definitions(dumbutf_unittests PRIVATE DUMBUTF_TESTS_FULL=1)
 
-    find_package(simdutf REQUIRED CONFIG)
-    target_link_libraries(dumbutf_unittests simdutf)
-
     add_library(utf8proc STATIC ${CMAKE_CURRENT_SOURCE_DIR}/utf8proc/utf8proc.c)
     target_include_directories(utf8proc
                                PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/utc8proc)
@@ -69,21 +66,21 @@ if(DUMBUTF_BUILD_TESTS)
   gtest_discover_tests(dumbutf_unittests)
 endif()
 
-if(DUMBUTF_CLI)
-  add_executable(dumbutf_cli ${CMAKE_CURRENT_SOURCE_DIR}/tests/Main.cpp)
-  target_compile_features(dumbutf_cli PRIVATE cxx_std_23)
-  set_target_properties(dumbutf PROPERTIES CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS
-                                                                  OFF)
-  include(FetchContent)
-  FetchContent_Declare(
-    fmt
-    GIT_REPOSITORY https://github.com/fmtlib/fmt
-    GIT_TAG        12.2.0)
-  FetchContent_MakeAvailable(fmt)
-
-  target_link_libraries(dumbutf_cli PRIVATE dumbutf)
-  target_link_libraries(dumbutf_cli PRIVATE fmt::fmt)
-
-  find_package(simdutf REQUIRED CONFIG)
-  target_link_libraries(dumbutf_cli PRIVATE simdutf)
-endif()
+# if(DUMBUTF_CLI)
+#   add_executable(dumbutf_cli ${CMAKE_CURRENT_SOURCE_DIR}/tests/Main.cpp)
+#   target_compile_features(dumbutf_cli PRIVATE cxx_std_23)
+#   set_target_properties(dumbutf PROPERTIES CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS
+#                                                                   OFF)
+#   include(FetchContent)
+#   FetchContent_Declare(
+#     fmt
+#     GIT_REPOSITORY https://github.com/fmtlib/fmt
+#     GIT_TAG        12.2.0)
+#   FetchContent_MakeAvailable(fmt)
+#
+#   target_link_libraries(dumbutf_cli PRIVATE dumbutf)
+#   target_link_libraries(dumbutf_cli PRIVATE fmt::fmt)
+#
+#   find_package(simdutf REQUIRED CONFIG)
+#   target_link_libraries(dumbutf_cli PRIVATE simdutf)
+# endif()
