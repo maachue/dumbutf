@@ -9,7 +9,7 @@
 #include <type_traits>
 
 namespace dumbutf {
-enum ERROR { INVALID_UTF8 = -1, BUFFER_OVERFLOW = -2 };
+enum ERROR { INVALID_UTF8 = -1, BUFFER_TOO_SMALL = -2 };
 
 using UTF8 = std::uint8_t;
 using UTF16 = std::uint16_t;

@@ -55,7 +55,7 @@ TEST_P(Iterate_UTF8_to_UTF32_Test, Convert) {
 
 static char StrWithNull[] = "\0";
 
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     OneByte, Iterate_UTF8_to_UTF32_Test,
     ::testing::Values(
         Iterate_UTF8_to_UTF32_Case{"A", 'A', 1, "ASCII 'A'"},
@@ -71,7 +71,7 @@ INSTANTIATE_TEST_CASE_P(
         Iterate_UTF8_to_UTF32_Case{{StrWithNull, 1}, 0x00, 1, "ASCII 'NULL'"},
         Iterate_UTF8_to_UTF32_Case{"@@fsf", '@', 1, "ASCII '@'"}));
 
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     TwoBytes, Iterate_UTF8_to_UTF32_Test,
     ::testing::Values(
         // Iterate_UTF8_to_UTF32_Case{"\xE9\x9B", 0xFFFD, 1,
@@ -83,7 +83,7 @@ INSTANTIATE_TEST_CASE_P(
         Iterate_UTF8_to_UTF32_Case{"\xCE\xB1%%$", 0x03B1, 2, "Alpha"},
         Iterate_UTF8_to_UTF32_Case{"\xD8\xA2$", 0x0622, 2, "Aleph"}));
 
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     OverlongAndSurrogate, Iterate_UTF8_to_UTF32_Test,
     ::testing::Values(Iterate_UTF8_to_UTF32_Case{"\xC0\xAF", 0xFFFD,
                                                  INVALID_UTF8,
@@ -92,7 +92,7 @@ INSTANTIATE_TEST_CASE_P(
                                                  INVALID_UTF8,
                                                  "Surrogate U+D800"}));
 
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     ThreeBytes, Iterate_UTF8_to_UTF32_Test,
     ::testing::Values(
         Iterate_UTF8_to_UTF32_Case{"\xE9\x9B\x80", 0x96C0, 3, "CJK U+96C0"},
@@ -104,7 +104,7 @@ INSTANTIATE_TEST_CASE_P(
         Iterate_UTF8_to_UTF32_Case{"\xE3\x81\x82すず", 0x3042, 3,
                                    "CJK U+3042 Hiragana 'あ'"}));
 
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     FourBytes, Iterate_UTF8_to_UTF32_Test,
     ::testing::Values(Iterate_UTF8_to_UTF32_Case{"\xF0\x9F\x98\x80", 0x1F600, 4,
                                                  "Emoji Grinning Face"},
@@ -119,7 +119,7 @@ INSTANTIATE_TEST_CASE_P(
                                                  0x1D11E, 4,
                                                  "Musical Symbol G Clef"}));
 
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     Invalid, Iterate_UTF8_to_UTF32_Test,
     ::testing::Values(
         Iterate_UTF8_to_UTF32_Case{"\xE9", 0xFFFD, INVALID_UTF8, ""},
@@ -176,7 +176,7 @@ TEST_P(Iterate_UTF8_to_UTF32_LOSSLY_Test, Convert) {
 }
 
 // --- 1 byte: valid ASCII (same well-formed inputs as the lossless suite) ---
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     OneByte, Iterate_UTF8_to_UTF32_LOSSLY_Test,
     ::testing::Values(
         Iterate_UTF8_to_UTF32_Case{"A", 'A', 1, "ASCII 'A'"},
@@ -190,7 +190,7 @@ INSTANTIATE_TEST_CASE_P(
 
 // --- 1 byte: invalid - bytes that can never start or continue a sequence.
 // These are rejected immediately, consuming exactly 1 byte each. ---
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     OneByte_Invalid, Iterate_UTF8_to_UTF32_LOSSLY_Test,
     ::testing::Values(
         Iterate_UTF8_to_UTF32_Case{
@@ -211,7 +211,7 @@ INSTANTIATE_TEST_CASE_P(
                                    "0xFF is never a valid UTF-8 byte"}));
 
 // --- 2 bytes: valid (same well-formed inputs as the lossless suite) ---
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     TwoBytes, Iterate_UTF8_to_UTF32_LOSSLY_Test,
     ::testing::Values(
         Iterate_UTF8_to_UTF32_Case{"\xCF\x80", 0x03C0 /* pi */, 2, "PI"},
@@ -222,7 +222,7 @@ INSTANTIATE_TEST_CASE_P(
         Iterate_UTF8_to_UTF32_Case{"\xD8\xA2$", 0x0622, 2, "Aleph"}));
 
 // --- 2 bytes: invalid ---
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     TwoBytes_Invalid, Iterate_UTF8_to_UTF32_LOSSLY_Test,
     ::testing::Values(
         Iterate_UTF8_to_UTF32_Case{
@@ -234,7 +234,7 @@ INSTANTIATE_TEST_CASE_P(
             "only leading byte counted"}));
 
 // --- 3 bytes: valid (same well-formed inputs as the lossless suite) ---
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     ThreeBytes, Iterate_UTF8_to_UTF32_LOSSLY_Test,
     ::testing::Values(
         Iterate_UTF8_to_UTF32_Case{"\xE9\x9B\x80", 0x96C0, 3, "CJK U+96C0"},
@@ -248,7 +248,7 @@ INSTANTIATE_TEST_CASE_P(
 
 // --- 3 bytes: invalid (truncated at various points, bad continuation at
 // various positions) ---
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     ThreeBytes_Invalid, Iterate_UTF8_to_UTF32_LOSSLY_Test,
     ::testing::Values(
         Iterate_UTF8_to_UTF32_Case{
@@ -271,7 +271,7 @@ INSTANTIATE_TEST_CASE_P(
 // --- Overlong encodings and surrogate halves: rejected via the narrowed
 // boundary check on the FIRST continuation byte, so only the leading byte
 // is consumed (the offending byte is prepended for the next decode). ---
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     OverlongAndSurrogate, Iterate_UTF8_to_UTF32_LOSSLY_Test,
     ::testing::Values(
         Iterate_UTF8_to_UTF32_Case{
@@ -296,7 +296,7 @@ INSTANTIATE_TEST_CASE_P(
             "Beyond U+10FFFF: 0xF4's continuation must be <= 0x8F"}));
 
 // --- 4 bytes: valid (same well-formed inputs as the lossless suite) ---
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     FourBytes, Iterate_UTF8_to_UTF32_LOSSLY_Test,
     ::testing::Values(Iterate_UTF8_to_UTF32_Case{"\xF0\x9F\x98\x80", 0x1F600, 4,
                                                  "Emoji Grinning Face"},
@@ -313,7 +313,7 @@ INSTANTIATE_TEST_CASE_P(
 
 // --- 4 bytes: invalid (truncated at various points, bad continuation at the
 // final position) ---
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     FourBytes_Invalid, Iterate_UTF8_to_UTF32_LOSSLY_Test,
     ::testing::Values(
         Iterate_UTF8_to_UTF32_Case{
@@ -331,6 +331,6 @@ INSTANTIATE_TEST_CASE_P(
             "counted"}));
 
 // --- Edge case: empty buffer ---
-INSTANTIATE_TEST_CASE_P(EdgeCases, Iterate_UTF8_to_UTF32_LOSSLY_Test,
-                        ::testing::Values(Iterate_UTF8_to_UTF32_Case{
-                            "", 0xFFFD, 0, "Empty input: nothing to read"}));
+INSTANTIATE_TEST_SUITE_P(EdgeCases, Iterate_UTF8_to_UTF32_LOSSLY_Test,
+                         ::testing::Values(Iterate_UTF8_to_UTF32_Case{
+                             "", 0xFFFD, 0, "Empty input: nothing to read"}));

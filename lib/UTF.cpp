@@ -68,11 +68,8 @@ int iterate_UTF8_to_UTF32(const UTF8 *Str, size_t Len, UTF32 &CP) {
     return INVALID_UTF8;
 
   if (UC == 0xF0)
-    if (Str[1] < 0x90)
+    if (Str[1] < 0x90 || (UC == 0xF4 && Str[1] > 0x8F))
       return INVALID_UTF8;
-    else if (UC == 0xF4)
-      if (Str[1] > 0x8F)
-        return INVALID_UTF8;
 
   CP = ((UC & 7) << 18) | ((Str[1] & 0x3F) << 12) | ((Str[2] & 0x3f) << 6) |
        (Str[3] & 0x3F);
@@ -282,7 +279,7 @@ ptrdiff_t convert_UTF8_to_UTF32_LOSSLY(const UTF8 *UTF8Str, size_t UTF8StrLen,
     UTF32 U;
     Count = iterate_UTF8_to_UTF32_LOSSLY(UTF8Str + i, UTF8StrLen - i, U);
     if (Curr >= UTF32StrLen) {
-      return BUFFER_OVERFLOW;
+      return BUFFER_TOO_SMALL;
     }
     UTF32Str[Curr++] = U;
   }

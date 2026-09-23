@@ -39,6 +39,7 @@ if(DUMBUTF_BUILD_TESTS)
 
   set(DUMBUTF_UNITTESTS_SOURCES
               ${CMAKE_CURRENT_SOURCE_DIR}/unittests/UTF/IterateTests.cpp
+              ${CMAKE_CURRENT_SOURCE_DIR}/unittests/UTF/ConvertTests.cpp
               ${CMAKE_CURRENT_SOURCE_DIR}/unittests/CharWidthTests.cpp
   )
 
@@ -54,7 +55,7 @@ if(DUMBUTF_BUILD_TESTS)
 
     add_library(utf8proc STATIC ${CMAKE_CURRENT_SOURCE_DIR}/utf8proc/utf8proc.c)
     target_include_directories(utf8proc
-                               PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/utc8proc)
+                               PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/utf8proc)
     target_compile_features(utf8proc PRIVATE c_std_99)
     set_target_properties(utf8proc PROPERTIES C_STANDARD_REQUIRED ON
                                               C_EXTENSIONS OFF)
